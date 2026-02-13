@@ -1,0 +1,52 @@
+/* Fond général */
+body {
+  background: #f6f7fb;
+}
+
+/* Navbar */
+#mainNavbar .nav-link {
+  position: relative;
+  font-weight: 500;
+}
+
+#mainNavbar .nav-link.active::after {
+  content: "";
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.35rem;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.9;
+}
+
+/* Avatar rond avec initiales */
+.avatar-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #111827;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* Cartes & rendu */
+.card {
+  border: 0;
+  border-radius: 16px;
+}
+
+.shadow-soft {
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+/* Petits titres */
+.page-title {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}

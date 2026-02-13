@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-start mb-3">
+  <div>
+    <h1 class="page-title mb-1">{{ post.title }}</h1>
+    <div class="text-muted small">
+      Catégorie : <strong>{{ post.category }}</strong>
+      • Auteur : {{ post.author ? post.author.email : '-' }}
+      • Publié : {{ post.publishedAt ? post.publishedAt|date('d/m/Y H:i') : '-' }}
+    </div>
+  </div>
+
+  <a class="btn btn-outline-secondary" href="{{ path('blog_posts') }}">
+    <i class="bi bi-arrow-left me-1"></i> Retour
+  </a>
+</div>
+
+{# ✅ Image du post #}
+{% if post.picture %}
+  <img src="{{ post.picture }}"
+       class="img-fluid rounded shadow-sm mb-4"
+       alt="Image de {{ post.title }}"
+       style="max-height:420px; width:100%; object-fit:cover;">
+{% endif %}
+
+<div class="card shadow-soft mb-4">
+  <div class="card-body">
+    {{ post.content }}
+  </div>
+</div>
+
+<h2 class="h4 mb-3">Commentaires</h2>
+
+{# ✅ Afficher uniquement les commentaires approved #}
+{% set hasApproved = false %}
+{% for c in post.comments %}
+  {% if c.status == 'approved' %}
+    {% set hasApproved = true %}
+    <div class="border rounded p-3 mb-2 bg-white">
+      <div class="d-flex justify-content-between">
+        <strong>{{ c.author ? c.author.email : 'Anonyme' }}</strong>
+        <span class="text-muted small">{{ c.createdAt ? c.createdAt|date('d/m/Y H:i') : '' }}</span>
+      </div>
+      <div class="mt-2">{{ c.content }}</div>
+    </div>
+  {% endif %}
+{% endfor %}
+
+{% if not hasApproved %}
+  <p class="text-muted">Aucun commentaire validé.</p>
+{% endif %}
+
+<hr class="my-4">
+
+{% if app.user %}
+  <h3 class="h5 mb-2">Ajouter un commentaire</h3>
+
+  {{ form_start(commentForm) }}
+    {{ form_row(commentForm.content, {'label': 'Ton commentaire'}) }}
+    <button class="btn btn-primary">
+      <i class="bi bi-send me-1"></i> Envoyer
+    </button>
+  {{ form_end(commentForm) }}
+
+  <div class="text-muted small mt-2">
+    Ton commentaire sera visible après validation par un admin.
+  </div>
+{% else %}
+  <div class="alert alert-warning">
+    Tu dois être connecté pour commenter.
+    <a href="{{ path('app_login') }}" class="alert-link">Se connecter</a>
+  </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Gestion des utilisateurs</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Email</th>
+      <th>Nom</th>
+      <th>Rôles</th>
+      <th>Actif</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for u in users %}
+      <tr>
+        <td>{{ u.id }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ u.firstName }} {{ u.lastName }}</td>
+        <td>{{ u.roles|join(', ') }}</td>
+        <td>
+          {% if u.isActive %}
+            ✅
+          {% else %}
+            ❌
+          {% endif %}
+        </td>
+        <td>
+          <form method="post" action="{{ path('admin_users_toggle', {id: u.id}) }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('toggle' ~ u.id) }}">
+            <button class="btn btn-sm {{ u.isActive ? 'btn-warning' : 'btn-success' }}">
+              {{ u.isActive ? 'Désactiver' : 'Activer' }}
+            </button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modération commentaires{% endblock %}
+
+{% block body %}
+<h1 class="mb-4">Modération des commentaires</h1>
+
+{% for message in app.flashes('success') %}
+  <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+
+<div class="row g-4">
+
+  <div class="col-lg-7">
+    <div class="card border-0 shadow-soft">
+      <div class="card-body">
+        <h2 class="h5 mb-3">En attente (pending)</h2>
+
+        {% for c in pending %}
+          <div class="border rounded-3 p-3 mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <strong>{{ c.author.email }}</strong>
+              <small class="text-muted">{{ c.createdAt|date('d/m/Y H:i') }}</small>
+            </div>
+
+            <div class="text-muted small mb-2">
+              Post :
+              <a href="{{ path('blog_show', {id: c.post.id}) }}">{{ c.post.title }}</a>
+            </div>
+
+            <div class="mb-3">{{ c.content }}</div>
+
+            <div class="d-flex gap-2">
+              <form method="post" action="{{ path('admin_comment_approve', {id: c.id}) }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('comment_action_' ~ c.id) }}">
+                <button class="btn btn-sm btn-success">Approuver</button>
+              </form>
+
+              <form method="post" action="{{ path('admin_comment_reject', {id: c.id}) }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('comment_action_' ~ c.id) }}">
+                <button class="btn btn-sm btn-outline-danger">Rejeter</button>
+              </form>
+            </div>
+          </div>
+        {% else %}
+          <p class="text-muted mb-0">Aucun commentaire en attente.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card border-0 shadow-soft">
+      <div class="card-body">
+        <h2 class="h5 mb-3">Validés (approved)</h2>
+
+        {% for c in approved %}
+          <div class="border rounded-3 p-3 mb-3 bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+              <strong>{{ c.author.email }}</strong>
+              <small class="text-muted">{{ c.createdAt|date('d/m/Y') }}</small>
+            </div>
+
+            <div class="text-muted small mb-2">
+              Post :
+              <a href="{{ path('blog_show', {id: c.post.id}) }}">{{ c.post.title }}</a>
+            </div>
+
+            <div class="mb-0">{{ c.content|slice(0, 160) }}{% if c.content|length > 160 %}...{% endif %}</div>
+          </div>
+        {% else %}
+          <p class="text-muted mb-0">Aucun commentaire validé.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

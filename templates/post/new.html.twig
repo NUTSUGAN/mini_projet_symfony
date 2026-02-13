@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un article{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-start mb-3">
+  <div>
+    <h1 class="page-title mb-1">Créer un nouvel article</h1>
+    <div class="text-muted small">Remplis le formulaire puis valide</div>
+  </div>
+
+  <a class="btn btn-outline-secondary" href="{{ path('app_post_index') }}">
+    <i class="bi bi-arrow-left me-1"></i> Retour à la liste
+  </a>
+</div>
+
+<div class="card shadow-soft">
+  <div class="card-body">
+    {{ include('post/_form.html.twig') }}
+  </div>
+</div>
+{% endblock %}

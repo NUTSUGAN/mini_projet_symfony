@@ -1,0 +1,122 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+<div class="card shadow-soft mb-4">
+  <div class="card-body p-4">
+    <div class="row align-items-center">
+      <div class="col-lg-7">
+        <h1 class="h3 mb-2">Bienvenue sur le Blog</h1>
+        <p class="text-muted mb-3">
+          Découvre les derniers articles publiés et laisse un commentaire si tu es connecté.
+        </p>
+        <a href="{{ path('blog_posts') }}" class="btn btn-primary">
+          <i class="bi bi-journal-text me-1"></i> Voir tous les articles
+        </a>
+      </div>
+
+      <div class="col-lg-5 mt-3 mt-lg-0">
+        <div class="border rounded p-3 bg-light">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge text-bg-dark">Tip</span>
+            <span class="small text-muted">Tu peux commenter si tu es connecté</span>
+          </div>
+          <ul class="small text-muted mb-0">
+            <li>Commentaires : validés par l’admin</li>
+            <li>Catégories : gérées côté admin</li>
+            <li>Posts : triés du plus récent au plus ancien</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{# ✅ Dernier article = premier de la liste #}
+{% if posts|length > 0 %}
+  {% set last = posts[0] %}
+
+  <div class="card shadow-soft mb-4">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-start mb-2">
+        <div>
+          <span class="badge bg-primary">Dernier article</span>
+          <h2 class="h4 mt-2 mb-1">{{ last.title }}</h2>
+          <div class="text-muted small">
+            Catégorie : <strong>{{ last.category }}</strong>
+            • Auteur : {{ last.author ? last.author.email : '-' }}
+            • Publié : {{ last.publishedAt ? last.publishedAt|date('d/m/Y H:i') : '-' }}
+          </div>
+        </div>
+
+        <a class="btn btn-outline-primary btn-sm" href="{{ path('blog_show', {id: last.id}) }}">
+          Lire <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+      </div>
+
+      {# ✅ Image du dernier article #}
+      {% if last.picture %}
+        <img src="{{ last.picture }}"
+             class="img-fluid rounded mb-3"
+             alt="Image de {{ last.title }}"
+             style="max-height:260px; width:100%; object-fit:cover;">
+      {% endif %}
+
+      <div class="text-muted">
+        {{ last.content|striptags|slice(0, 160) }}{% if last.content|length > 160 %}...{% endif %}
+      </div>
+    </div>
+  </div>
+
+  {# ✅ À lire aussi = le reste #}
+  {% set others = posts|slice(1) %}
+
+  {% if others|length > 0 %}
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h3 class="h5 mb-0">À lire aussi</h3>
+      <a class="small text-muted text-decoration-none" href="{{ path('blog_posts') }}">Tout voir</a>
+    </div>
+
+    <div class="row g-3">
+      {% for post in others %}
+        <div class="col-md-6 col-lg-4">
+          <div class="card shadow-soft h-100">
+            <div class="card-body">
+
+              {# ✅ Image miniature #}
+              {% if post.picture %}
+                <img src="{{ post.picture }}"
+                     class="rounded mb-2"
+                     alt="Image de {{ post.title }}"
+                     style="height:140px; width:100%; object-fit:cover;">
+              {% endif %}
+
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="badge text-bg-light text-dark border">{{ post.category }}</span>
+                <span class="text-muted small">
+                  {{ post.publishedAt ? post.publishedAt|date('d/m/Y') : '' }}
+                </span>
+              </div>
+
+              <h4 class="h6 mb-2">{{ post.title }}</h4>
+
+              <p class="text-muted small mb-3">
+                {{ post.content|striptags|slice(0, 90) }}{% if post.content|length > 90 %}...{% endif %}
+              </p>
+
+              <a href="{{ path('blog_show', {id: post.id}) }}" class="btn btn-sm btn-outline-primary">
+                Lire
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% else %}
+  <div class="alert alert-info">
+    Aucun article pour le moment.
+  </div>
+{% endif %}
+{% endblock %}
