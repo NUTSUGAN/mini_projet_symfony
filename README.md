@@ -1,4 +1,4 @@
-# Mini Projet Symfony — Blog ![PusheenLaptopGIF](https://github.com/user-attachments/assets/4eec2d0f-1e88-4dde-9ba2-7fd48c078b40)
+# Mini Projet Symfony — Blog 
 
 
 Projet Symfony (Blog) avec :
@@ -129,6 +129,7 @@ php bin/console cache:clear
 📌 Auteur
 Projet réalisé dans le cadre du module Symfony — IPSSI. 
 
+                                         ![PusheenLaptopGIF](https://github.com/user-attachments/assets/b2becd4d-3adc-4b9e-ba1f-552be1cc726a)
 
 
 ---
