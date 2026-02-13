@@ -1,6 +1,4 @@
-# mini_projet_symfony
-
-# Mini Projet Symfony — IPSSI Blog
+# Mini Projet Symfony — Blog
 
 Projet Symfony (Blog) avec :
 - Authentification (register / login)
